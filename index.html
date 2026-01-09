@@ -184,17 +184,23 @@
 <script>
     microsoftTeams.app.initialize().then(() => {
         microsoftTeams.app.getContext().then(context => {
-            setTheme(context.app.theme || "default");
+            applyTheme(context.app.theme);
         });
 
         microsoftTeams.app.registerOnThemeChangeHandler(theme => {
-            setTheme(theme || "default");
+            applyTheme(theme);
         });
     });
 
-    function setTheme(theme) {
-        document.documentElement.setAttribute("data-theme", theme);
+    function applyTheme(theme) {
+        if (theme === "dark" || theme === "contrast") {
+            document.documentElement.setAttribute("data-theme", theme);
+        } else {
+            // light / default → REMOVE attribute
+            document.documentElement.removeAttribute("data-theme");
+        }
     }
 </script>
+
 </body>
 </html>
