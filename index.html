@@ -7,92 +7,119 @@
 
     <!-- Simple clean dashboard layout -->
     <style>
-        :root {
-            --bg: #0f172a;
-            --card: #111827;
-            --accent: #6366f1;
-            --text: #e5e7eb;
-            --muted: #9ca3af;
-        }
+    :root {
+        --bg: #0f172a;
+        --card: #111827;
+        --accent: #6366f1;
+        --text: #e5e7eb;
+        --muted: #9ca3af;
+    }
 
-        * {
-            box-sizing: border-box;
-        }
+    * {
+        box-sizing: border-box;
+    }
 
-        body {
-            margin: 0;
-            font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-            background: radial-gradient(circle at top, #1e293b, #020617);
-            color: var(--text);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-        }
+    body {
+        margin: 0;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        background: radial-gradient(circle at top, #1e293b, #020617);
+        color: var(--text);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+    }
 
-        .container {
-            width: 100%;
-            max-width: 1100px;
-            padding: 32px 20px 48px;
-        }
+    .container {
+        width: 100%;
+        max-width: 1100px;
+        padding: 32px 20px 48px;
+    }
 
-        header {
-            margin-bottom: 32px;
-        }
+    header {
+        margin-bottom: 32px;
+    }
 
-        h1 {
-            font-size: 2.2rem;
-            margin: 0 0 8px;
-        }
+    h1 {
+        font-size: 2.2rem;
+        margin: 0 0 8px;
+    }
 
-        .subtitle {
-            color: var(--muted);
-        }
+    .subtitle {
+        color: var(--muted);
+    }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 20px;
-        }
+    /* GRID LOGIC */
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
 
-        .card {
-            background: linear-gradient(180deg, #0b1220, #020617);
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
+    /* 1 card → full width */
+    .grid > .card:only-child {
+        grid-column: 1 / -1;
+    }
 
-        .card h2 {
-            margin: 0 0 8px;
-            font-size: 1.25rem;
-        }
+    /* 2 cards → 50 / 50 */
+    .grid > .card:nth-child(1):nth-last-child(2),
+    .grid > .card:nth-child(2):nth-last-child(1) {
+        grid-column: span 1;
+    }
 
-        .card p {
-            margin: 0 0 20px;
-            color: var(--muted);
-            line-height: 1.5;
-            flex-grow: 1;
-        }
+    /* 4th card and далее → new row, full width */
+    .grid > .card:nth-child(n+4) {
+        grid-column: 1 / -1;
+    }
 
-        .card a {
-            display: inline-block;
-            text-align: center;
-            padding: 12px 18px;
-            border-radius: 999px;
-            text-decoration: none;
-            color: #fff;
-            background: linear-gradient(135deg, var(--accent), #4f46e5);
-            font-weight: 600;
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
-        }
+    .card {
+        background: linear-gradient(180deg, #0b1220, #020617);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
 
-        .card a:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 30px rgba(99,102,241,0.45);
-        }
-    </style>
+    .card h2 {
+        margin: 0 0 8px;
+        font-size: 1.25rem;
+    }
+
+    .card p {
+        margin: 0 0 20px;
+        color: var(--muted);
+        line-height: 1.5;
+        flex-grow: 1;
+    }
+
+    .card a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 220px;          /* фиксированная ширина кнопки */
+        max-width: 100%;
+
+        padding: 12px 0;
+        margin: 0 auto;        /* центрирование в карточке */
+
+        border-radius: 999px;
+        text-decoration: none;
+        color: #fff;
+
+        background: linear-gradient(135deg, var(--accent), #4f46e5);
+        font-weight: 600;
+
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .card a:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px rgba(99,102,241,0.45);
+    }
+</style>
+
 </head>
 <body>
     <div class="container">
@@ -127,15 +154,30 @@
             </div>
 
             <div class="card">
-                <h2>IT Inventory System</h2>
+                <h2>Inventory System</h2>
                 <p>
-                    IT asset inventory management system.
+                    IT and office assets Inventory management system.
                 </p>
                 <a href="https://inventory.myit.az"
                    target="_blank" rel="noopener noreferrer">
                     Open Inventory
                 </a>
             </div>
+
+
+            <div class="card">
+                <h2>Paid Time Off</h2>
+                <p>
+                    Manage your paid leave, view how many days you have accumulated,
+                    and see who is currently on vacation.
+                </p>
+                <a href="https://pto.ei-g.dev/profile"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    Open PTO
+                </a>
+            </div>
+
 
         </section>
     </div>
