@@ -68,16 +68,8 @@
         /* ===== GRID LOGIC ===== */
         .grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
-        }
-
-        .grid > .card:only-child {
-            grid-column: 1 / -1;
-        }
-
-        .grid > .card:nth-child(n+4) {
-            grid-column: 1 / -1;
         }
 
         /* ===== CARD ===== */
@@ -211,6 +203,46 @@
             document.documentElement.removeAttribute("data-theme");
         }
     }
+</script>
+
+<script>
+    function fixLastGridRow() {
+        const grid = document.querySelector(".grid");
+        if (!grid) return;
+
+        const cards = Array.from(grid.children);
+
+        // Reset inline styles
+        cards.forEach(card => card.style.gridColumn = "");
+
+        if (cards.length < 2) return;
+
+        // Calculate actual column count
+        const gridStyles = getComputedStyle(grid);
+        const columns = gridStyles.gridTemplateColumns.split(" ").length;
+
+        const remainder = cards.length % columns;
+
+        // If only one card in the last row → make it full width
+        if (remainder === 1) {
+            cards[cards.length - 1].style.gridColumn = "1 / -1";
+        }
+
+        // If two cards in the last row and grid has 3 columns → 50/50
+        if (remainder === 2 && columns === 3) {
+            cards[cards.length - 2].style.gridColumn = "span 1";
+            cards[cards.length - 1].style.gridColumn = "span 1";
+        }
+    }
+
+    // Run on load
+    window.addEventListener("load", fixLastGridRow);
+
+    // Run on resize (important for auto-fit)
+    window.addEventListener("resize", () => {
+        clearTimeout(window.__gridResizeTimer);
+        window.__gridResizeTimer = setTimeout(fixLastGridRow, 150);
+    });
 </script>
 
 </body>
