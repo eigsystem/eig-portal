@@ -211,27 +211,31 @@
         if (!grid) return;
 
         const cards = Array.from(grid.children);
+
+        // Reset
         cards.forEach(card => card.style.gridColumn = "");
 
-        const style = getComputedStyle(grid);
-        const columns = style.gridTemplateColumns
+        const gridStyle = getComputedStyle(grid);
+        const columnCount = gridStyle.gridTemplateColumns
             .trim()
             .split(/\s+(?![^(]*\))/)
             .length;
 
-        const remainder = cards.length % columns;
+        if (columnCount < 2) return;
 
-        // Default layout
-        grid.style.gridTemplateColumns = "repeat(auto-fit, minmax(280px, 1fr))";
+        const remainder = cards.length % columnCount;
 
-        // 1 card in last row → full width
+        // One card in last row → 100%
         if (remainder === 1) {
             cards[cards.length - 1].style.gridColumn = "1 / -1";
         }
 
-        // 2 cards in last row → FORCE 50 / 50
-        if (remainder === 2 && columns >= 3) {
-            grid.style.gridTemplateColumns = "repeat(2, 1fr)";
+        // Two cards in last row → 50 / 50
+        if (remainder === 2) {
+            const startIndex = cards.length - 2;
+
+            cards[startIndex].style.gridColumn = "span " + Math.floor(columnCount / 2);
+            cards[startIndex + 1].style.gridColumn = "span " + Math.ceil(columnCount / 2);
         }
     }
 
@@ -242,6 +246,7 @@
         window.__gridResizeTimer = setTimeout(fixLastGridRow, 150);
     });
 </script>
+
 
 
 </body>
