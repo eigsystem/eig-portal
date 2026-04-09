@@ -1,1 +1,1 @@
-# it-team-portal
+# EIG Portal
